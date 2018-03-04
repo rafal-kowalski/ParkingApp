@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 @Component
 public class VipParkingRate implements ParkingRate {
+    private static final BigDecimal TWO = new BigDecimal("2");
     private static final BigDecimal ONE_AND_HALF = new BigDecimal("1.5");
     @Override
     public BigDecimal calculate(CurrencyConversionRate currency, long hours) {
@@ -16,13 +17,13 @@ public class VipParkingRate implements ParkingRate {
 
         for (long i = 1; i < hours; i++) {
             if (i == 1) {
-                previousHourCost = sum.add(rate.multiply(ONE_AND_HALF));
+                previousHourCost = TWO;
                 sum = previousHourCost;
             } else {
-                sum = sum.add(rate.multiply(previousHourCost));
                 previousHourCost = previousHourCost.multiply(ONE_AND_HALF);
+                sum = sum.add(previousHourCost);
             }
         }
-        return sum;
+        return sum.multiply(rate);
     }
 }

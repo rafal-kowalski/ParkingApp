@@ -16,15 +16,15 @@ public class RegularParkingRate implements ParkingRate {
 
         for (long i = 0; i < hours; i++) {
             if (i == 0) {
-                sum = sum.add(rate.multiply(BigDecimal.ONE));
+                sum = sum.add(BigDecimal.ONE);
             } else if (i == 1) {
-                previousHourCost = sum.add(rate.multiply(TWO));
-                sum = previousHourCost;
+                previousHourCost = new BigDecimal(2);
+                sum = sum.add(previousHourCost);
             } else {
-                sum = sum.add(rate.multiply(previousHourCost));
                 previousHourCost = previousHourCost.multiply(TWO);
+                sum = sum.add(previousHourCost);
             }
         }
-        return sum;
+        return sum.multiply(rate);
     }
 }
