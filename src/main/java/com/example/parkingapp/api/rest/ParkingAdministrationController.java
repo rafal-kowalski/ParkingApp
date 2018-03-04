@@ -26,7 +26,7 @@ public class ParkingAdministrationController {
     }
 
     @RequestMapping(value = "/{licensePlateNumber}/status", method = RequestMethod.GET)
-    public VehicleStatusVM getStatus(@PathVariable String licensePlateNumber) {
+    public VehicleStatusVM getParkedVehicleStatus(@PathVariable String licensePlateNumber) {
         return parkingAdministrationService.checkVehicleStatus(licensePlateNumber);
     }
 }

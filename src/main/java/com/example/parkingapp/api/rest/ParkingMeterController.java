@@ -30,7 +30,7 @@ public class ParkingMeterController {
     }
 
     @RequestMapping(value = "/{licensePlateNumber}/details", method = RequestMethod.GET)
-    public VehicleStatusVM getStatus(
+    public VehicleStatusVM getParkedVehicleDetails(
         @PathVariable String licensePlateNumber,
         @RequestParam(name = "pin", required = false) String pin,
         @RequestParam(name = "currency", defaultValue = "PLN") String currency) {
