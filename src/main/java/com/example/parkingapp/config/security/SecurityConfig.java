@@ -43,9 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+            .csrf()
+            .disable()
             .authorizeRequests()
+            .antMatchers("/api/administration/earnings").hasRole("PARKING_OWNER")
+            .antMatchers("/api/administration/**").hasRole("PARKING_OPERATOR")
             .anyRequest()
-            .authenticated()
+            .permitAll()
         .and()
             .httpBasic();
     }
