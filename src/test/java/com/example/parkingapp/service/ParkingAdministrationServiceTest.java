@@ -3,7 +3,9 @@ package com.example.parkingapp.service;
 import com.example.parkingapp.api.rest.exceptions.VehicleNotParkedException;
 import com.example.parkingapp.api.rest.vm.ParkingStatisticsVM;
 import com.example.parkingapp.api.rest.vm.VehicleStatusVM;
+import com.example.parkingapp.config.AcceptedCurrencies;
 import com.example.parkingapp.config.ParkingRecordStatus;
+import com.example.parkingapp.domain.Earnings;
 import com.example.parkingapp.domain.ParkingRecord;
 import com.example.parkingapp.domain.ParkingRecordID;
 import com.example.parkingapp.repository.ParkingRecordRepository;
@@ -15,7 +17,9 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -66,14 +70,17 @@ public class ParkingAdministrationServiceTest implements WithAssertions {
     @Test
     public void shouldReturnEarningsForGivenDate() {
         //given
+        Set<Earnings> earnings = new HashSet<>();
+        earnings.add(new Earnings(BigDecimal.TEN, AcceptedCurrencies.PLN));
         LocalDate date = LocalDate.now();
         when(parkingRecordRepositoryMock.sumAllPaymentsWithinDate(any(LocalDateTime.class), any(LocalDateTime.class)))
-            .thenReturn(BigDecimal.TEN);
+            .thenReturn(earnings);
 
         //when
         ParkingStatisticsVM result = sut.getEarningsForGivenDay(date);
 
         //then
-        assertThat(result.getEarnings()).isEqualByComparingTo(BigDecimal.TEN);
+        assertThat(result.getEarnings())
+            .allMatch(p -> p.getValue().equals(BigDecimal.TEN) && p.getCurrency().equals(AcceptedCurrencies.PLN));
     }
 }

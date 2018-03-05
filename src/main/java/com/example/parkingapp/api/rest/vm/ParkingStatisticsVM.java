@@ -1,22 +1,24 @@
 package com.example.parkingapp.api.rest.vm;
 
-import java.math.BigDecimal;
+import com.example.parkingapp.domain.Earnings;
+
+import java.util.Set;
 
 /**
  * View Model for parking statistics
  */
 public class ParkingStatisticsVM {
-    private BigDecimal earnings;
+    private Set<Earnings> earnings;
 
-    public ParkingStatisticsVM(BigDecimal earnings) {
+    public ParkingStatisticsVM(Set<Earnings> earnings) {
         this.earnings = earnings;
     }
 
-    public BigDecimal getEarnings() {
+    public Set<Earnings> getEarnings() {
         return earnings;
     }
 
-    public void setEarnings(BigDecimal earnings) {
+    public void setEarnings(Set<Earnings> earnings) {
         this.earnings = earnings;
     }
 
