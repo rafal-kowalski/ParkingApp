@@ -24,6 +24,13 @@ public class ParkingCostCalculator {
         this.conversionRateRepository = conversionRateRepository;
     }
 
+    /**
+     * Calculates parking cost depending on user type (Regular/VIP) and total time
+     * @param totalHours number of hours vehicle was parked
+     * @param currency payment currency
+     * @param user vehicle user, may be <code>null</code>
+     * @return total parking cost
+     */
     public BigDecimal calculateCost(long totalHours, AcceptedCurrencies currency, User user) {
         ParkingRate parkingRate = parkingRateFactory.getParkingRate(user);
         Optional<CurrencyConversionRate> conversionRate = conversionRateRepository.findById(currency);

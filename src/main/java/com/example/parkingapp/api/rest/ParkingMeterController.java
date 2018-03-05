@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * Controller for managing parking meter
+ */
 @RestController
 @RequestMapping("/api/parking-meter")
 public class ParkingMeterController {
@@ -17,11 +20,22 @@ public class ParkingMeterController {
         this.parkingMeterService = parkingMeterService;
     }
 
+    /**
+     * Starts the parking meter for given vehicle
+     * @param license contains license number belonging to vehicle
+     * @return details for parked vehicle
+     */
     @RequestMapping(value = "/start", method = RequestMethod.POST)
     public ParkingMeterStartedVM startParkingMeter(@RequestBody @Valid LicensePlateVM license) {
         return parkingMeterService.startParkingMeter(license.getNumber());
     }
 
+    /**
+     * Stops the parking meter for given vehicle
+     * @param license vehicle license number
+     * @param currency payment currency
+     * @return parking summary for given vehicle
+     */
     @RequestMapping(value = "/stop", method = RequestMethod.POST)
     public VehicleStatusVM stopParkingMeter(
         @RequestBody @Valid LicensePlateVM license,
@@ -29,6 +43,13 @@ public class ParkingMeterController {
         return parkingMeterService.stopParkingMeter(license, currency);
     }
 
+    /**
+     * Gets parking details for given vehicle
+     * @param licensePlateNumber vehicle license number
+     * @param pin pin code for authentication in case of anonymous users
+     * @param currency payment currency
+     * @return parking summary for given vehicle
+     */
     @RequestMapping(value = "/{licensePlateNumber}/details", method = RequestMethod.GET)
     public VehicleStatusVM getParkedVehicleDetails(
         @PathVariable String licensePlateNumber,

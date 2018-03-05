@@ -41,6 +41,9 @@ public class ParkingMeterService {
         this.costCalculator = costCalculator;
     }
 
+    /**
+     * Starts the parking meter
+     */
     public ParkingMeterStartedVM startParkingMeter(String licenseNumber) {
         Optional<ParkingRecord> alreadyParked = parkingRecordRepository.findByLicensePlateAndStatus(licenseNumber, ParkingRecordStatus.STARTED);
         alreadyParked.map(pr -> {
@@ -53,6 +56,9 @@ public class ParkingMeterService {
             .orElseGet(() -> startForAnonymous(licenseNumber));
     }
 
+    /**
+     * Stops parking meter
+     */
     public VehicleStatusVM stopParkingMeter(LicensePlateVM license, String currencyUnit) {
         ParkingRecord parkingRecord = getParkingRecord(license);
 
@@ -79,6 +85,9 @@ public class ParkingMeterService {
         return vehicleStatus;
     }
 
+    /**
+     * Checks vehicle details
+     */
     public VehicleStatusVM checkVehicleDetails(LicensePlateVM license, String currencyUnit) {
         ParkingRecord parkingRecord = getParkingRecord(license);
 
@@ -99,6 +108,9 @@ public class ParkingMeterService {
         return vehicleStatus;
     }
 
+    /**
+     * Returns parking record for given license plate if it exists, otherwise throws {@link com.example.parkingapp.api.rest.exceptions.VehicleNotParkedException}
+     */
     private ParkingRecord getParkingRecord(LicensePlateVM license) {
         Optional<ParkingRecord> byLicensePlate = parkingRecordRepository.findByLicensePlateAndStatus(license.getNumber(), ParkingRecordStatus.STARTED);
         //had to explicitly pass exception type due to
@@ -109,6 +121,9 @@ public class ParkingMeterService {
         });
     }
 
+    /**
+     * Throws exception if user is not authorized to modify given parked vehicle
+     */
     private void raiseExceptionIfNotAuthorized(LicensePlateVM license, ParkingRecord parkingRecord) {
         if (SecurityUtils.isAuthenticated()) {
             boolean isOwner = SecurityUtils.getCurrentUserLogin()
@@ -125,6 +140,9 @@ public class ParkingMeterService {
         }
     }
 
+    /**
+     * Starts parking meter for authenticated user
+     */
     private ParkingMeterStartedVM startForAuthenticated(String licenseNumber, User user) {
         ParkingRecord parkingRecord = new ParkingRecord();
         ParkingMeterStartedVM meterStartedVM = new ParkingMeterStartedVM();
@@ -138,6 +156,9 @@ public class ParkingMeterService {
         return meterStartedVM;
     }
 
+    /**
+     * Starts parking meter for anonymous user attaching PIN code to response
+     */
     private ParkingMeterStartedVM startForAnonymous(String licenseNumber) {
         ParkingRecord parkingRecord = new ParkingRecord();
         ParkingMeterStartedVM meterStartedVM = new ParkingMeterStartedVM();
@@ -153,6 +174,9 @@ public class ParkingMeterService {
         return meterStartedVM;
     }
 
+    /**
+     * Sets fields common to both authenticated and anonymous users
+     */
     private void setCommonFields(ParkingRecord parkingRecord, ParkingMeterStartedVM meterStartedVM, String licenseNumber) {
         ParkingRecordID id = new ParkingRecordID();
         LocalDateTime now = LocalDateTime.now();

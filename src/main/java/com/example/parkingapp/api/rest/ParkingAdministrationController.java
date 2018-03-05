@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+/**
+ * Controller for managing parking
+ */
 @RestController
 @RequestMapping("/api/administration")
 public class ParkingAdministrationController {
@@ -17,6 +20,11 @@ public class ParkingAdministrationController {
         this.parkingAdministrationService = parkingAdministrationService;
     }
 
+    /**
+     * Calculates earnings made in given day
+     * @param date day to calculate earnings for
+     * @return earnings made in given day
+     */
     @RequestMapping(value = "/earnings", method = RequestMethod.GET)
     public ParkingStatisticsVM getEarningsForGivenDay(
         @RequestParam(name = "date")
@@ -25,6 +33,13 @@ public class ParkingAdministrationController {
         return parkingAdministrationService.getEarningsForGivenDay(date);
     }
 
+    /**
+     * Checks if vehicle with given license number is currently parked
+     * If vehicle is found it returns basic information about vehicle otherwise it throws
+     * {@link com.example.parkingapp.api.rest.exceptions.VehicleNotParkedException}
+     * @param licensePlateNumber license number of vehicle to check
+     * @return vehicle details
+     */
     @RequestMapping(value = "/{licensePlateNumber}/status", method = RequestMethod.GET)
     public VehicleStatusVM getParkedVehicleStatus(@PathVariable String licensePlateNumber) {
         return parkingAdministrationService.checkVehicleStatus(licensePlateNumber);
